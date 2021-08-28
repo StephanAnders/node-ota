@@ -15,7 +15,7 @@ enum OtaState {
 
 // public types
 export type onStartCallback = (size: number) => void;
-export type onProgressCallback = (currentPacket: number, transferred: number, total: number, data: string) => void;
+export type onProgressCallback = (currentPacket: number, transferred: number, total: number, data: Buffer) => void;
 export type onErrorCallback = (err: Error) => void;
 export type onEndCallback = () => void;
 
@@ -204,7 +204,7 @@ export class NodeOTA {
                 if (this.debug) console.log('NodeOTA.state(updating => idle)');
                 this.state = OtaState.IDLE;
             });
-            socket.on('data', (data: string) => {
+            socket.on('data', (data: Buffer) => {
                 if (this.state === OtaState.UPDATING) {
                     transferred += data.length;
                     socket.write(data.length.toString());

@@ -1,8 +1,10 @@
 const nodeOta = require('./dist/index.js');
+const fs = require('fs');
 
 const ota = new nodeOta.NodeOTA(true);
 
 let file = '';
+let filehandle = fs.createWriteStream('./binary.hex');
 ota
     .begin('Node Device', 8266, 'test')
     .onStart((size => {
@@ -10,7 +12,7 @@ ota
         console.log('START');
     }))
     .onProgress(((currentPacket, transferred, total, data) => {
-        file += data;
+        filehandle.write(data);
         console.log((transferred / total) * 100 + '%');
     }))
     .onError(((err) => {
@@ -18,7 +20,9 @@ ota
         console.log('ERROR');
     }))
     .onEnd(() => {
-        console.log('END')
+        filehandle.close();
+        console.log('FILE WRITTEN')
+        console.log('END');
     });
 
 process.on('SIGINT', function() {

@@ -1,6 +1,6 @@
 {
   "name": "node-ota",
-  "version": "1.0.2",
+  "version": "2.0.0",
   "description": "ArduinoOTA-like client written in JS",
   "main": "dist/index.js",
   "files": [

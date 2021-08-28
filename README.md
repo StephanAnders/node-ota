@@ -1,4 +1,7 @@
 # Node OTA
+## TL;DR
+- see Example section of this document
+
 ## Motivation
 I'd like to run/maintain an Arduino board that is connected to a Raspberry Pi Zero without having the need
 to hassle with manual updating the Arduino firmware via the Rasperry. Therefore I implemented this node-based ArduinoOTA
@@ -12,6 +15,7 @@ Nonetheless, I'll reply to all issues you create and review/merge your PRs (if t
 ## Version history (semantic versioning)
 - v1.0.1 -> first working implementation
 - v1.0.2 -> fix package.json
+- v2.0.0 -> fix onProgress event and extend example
 
 ## Implementation
 I followed the implementation of the original [ArduinoOTA](https://github.com/esp8266/Arduino/blob/master/libraries/ArduinoOTA) library
@@ -67,27 +71,24 @@ Call this method and provide a callback if you like to be notified about upcomin
 type returns void and has no parameters
 
 ### Example
+- run `npm install node-ota? 
+- copy this code into a .js file and execute it with node
 ```js
 const nodeOta = require('node-ota');
+const fs = require('fs');
 
-const ota = new nodeOta.NodeOTA(true);
-
-process.on('SIGINT', function() {
-    process.exit();
-});
-process.on('exit', code => {
-    ota.end();
-});
+const ota = new nodeOta.NodeOTA(true); // true => debug output active
 
 let file = '';
+let filehandle = fs.createWriteStream('./binary.hex');
 ota
-    .begin('Node Device', 8266, 'test')
+    .begin('Node Device', 8268, 'test')
     .onStart((size => {
         file = '';
         console.log('START');
     }))
     .onProgress(((currentPacket, transferred, total, data) => {
-        file += data;
+        filehandle.write(data);
         console.log((transferred / total) * 100 + '%');
     }))
     .onError(((err) => {
@@ -95,8 +96,27 @@ ota
         console.log('ERROR');
     }))
     .onEnd(() => {
-        console.log('END')
+        filehandle.close();
+        console.log('FILE WRITTEN')
+        console.log('END');
     });
+
+process.on('SIGINT', function() {
+    process.exit();
+});
+process.on('exit', code => {
+    ota.end();
+});
+```
+- go to your Arduino IDE, select the port labelled as 'Node Device'
+- build and upload a sketch e.g. the Blink sketch (password is `test`)
+- upload the file that was created by the example script (the following command is for esp boards only)
+```shell
+<path to python>python 
+  <path to your esp8266 tools>/upload.py 
+  --chip esp8266 
+  --port <your com port> 
+  --baud 115200 --after hard_reset write_flash 0x0 "<path to example script>\binary.hex"
 ```
 
 # License
