@@ -1,9 +1,11 @@
 {
   "name": "node-ota",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "ArduinoOTA-like client written in JS",
   "main": "dist/index.js",
-  "files": ["dist/index.js"],
+  "files": [
+    "dist/index.js"
+  ],
   "scripts": {
     "build": "rollup -c rollup.config.js",
     "start": "rollup -c rollup.config.js && node start.js",
@@ -11,7 +13,11 @@
   },
   "author": "Stephan Anders",
   "license": "WTFPL",
-  "keywords": ["node", "arduino", "ota"],
+  "keywords": [
+    "node",
+    "arduino",
+    "ota"
+  ],
   "devDependencies": {
     "@rollup/plugin-typescript": "^8.2.5",
     "@types/node": "^12.0.2",
@@ -26,6 +32,5 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/StephanAnders/node-ota"
-  },
-  "os": ["linux", "windows"]
+  }
 }

@@ -11,6 +11,7 @@ Nonetheless, I'll reply to all issues you create and review/merge your PRs (if t
 
 ## Version history (semantic versioning)
 - v1.0.1 -> first working implementation
+- v1.0.2 -> fix package.json
 
 ## Implementation
 I followed the implementation of the original [ArduinoOTA](https://github.com/esp8266/Arduino/blob/master/libraries/ArduinoOTA) library
