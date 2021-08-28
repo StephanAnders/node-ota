@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "noEmitOnError": true,
+    "strict": true,
+    "esModuleInterop": false,
+    "rootDir": "./"
+  }
+,
+  "include": [
+    "./src/**/*.ts",
+  ]
+}
