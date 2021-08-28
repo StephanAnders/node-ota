@@ -10,8 +10,7 @@ That's none of my best works, but will do the trick for my project and most like
 Nonetheless, I'll reply to all issues you create and review/merge your PRs (if they're not total garbage).
 
 ## Version history (semantic versioning)
-- v1.0.0 -> basic implementation
-- v1.0.1 -> updated README.md
+- v1.0.1 -> first working implementation
 
 ## Implementation
 I followed the implementation of the original [ArduinoOTA](https://github.com/esp8266/Arduino/blob/master/libraries/ArduinoOTA) library
@@ -111,5 +110,5 @@ library first and start the node script `start.js` afterwards.
 Feel free to create issues or PRs.
 
 # TODOs
-- [ ] publishing this library as npm
+- [x] publishing this library as npm
 - [ ] automatic test
