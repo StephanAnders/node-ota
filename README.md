@@ -86,7 +86,7 @@ let filehandle = null;
 ota
     .begin('Node Device', 8266, 'test')
     .onStart((size => {
-        filehandle = fs.createWriteStream('./binary.hex');
+        filehandle = fs.createWriteStream('./binary.bin');
         console.log('Script.start()');
     }))
     .onProgress(((currentPacket, transferred, total, data) => {
