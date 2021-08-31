@@ -70,35 +70,55 @@ onErrorCallback type returns void and accepts the following parameters:
 Call this method and provide a callback if you like to be notified about upcoming data transmissions. The onEndCallback
 type returns void and has no parameters
 
-### Example
-- run `npm install node-ota? 
-- copy this code into a .js file and execute it with node
+### Example for ESP chips and linux-based device
+- run `npm install node-ota` 
+- copy this code into a .js file and adjust the board constant (ESP32 or ESP8266) and adjust the child process call in the onEnd callback
+- execute it with node
 ```js
 const nodeOta = require('node-ota');
 const fs = require('fs');
+const { spawn } = require('child_process');
+const ota = new nodeOta.NodeOTA(true);
 
-const ota = new nodeOta.NodeOTA(true); // true => debug output active
+const board = 'ESP8266'; // or 'ESP32';
 
-let file = '';
-let filehandle = fs.createWriteStream('./binary.hex');
+let filehandle = null;
 ota
-    .begin('Node Device', 8268, 'test')
+    .begin('Node Device', 8266, 'test')
     .onStart((size => {
-        file = '';
-        console.log('START');
+        filehandle = fs.createWriteStream('./binary.hex');
+        console.log('Script.start()');
     }))
     .onProgress(((currentPacket, transferred, total, data) => {
         filehandle.write(data);
-        console.log((transferred / total) * 100 + '%');
     }))
     .onError(((err) => {
-        file = '';
-        console.log('ERROR');
+        console.log('Script.error()');
     }))
     .onEnd(() => {
+        console.log('Script.end()');
         filehandle.close();
-        console.log('FILE WRITTEN')
-        console.log('END');
+
+        const params = board === 'ESP32'
+            ? ['--port', '/dev/ttyUSB0', '--baud', '115200', '--before', 'default_reset', '--after', 'hard_reset', 'write_flash', '0x10000', 'binary.hex']
+            : ['--port', '/dev/ttyUSB0', '--baud', '115200', '--before', 'default_reset', '--after', 'hard_reset', 'write_flash', '0x0', 'binary.hex']
+        const esptool = spawn('esptool.py', params, {cwd: __dirname});
+
+        esptool.stdout.on('data', (data) => {
+            console.log('Esptool.stdout(' + data + ')');
+        });
+
+        esptool.stderr.on('data', (data) => {
+            console.error('Esptool.stderr(' + data + ')');
+        });
+
+        esptool.on('close', (code) => {
+            if (code !== 0) {
+                console.log('Esptool.error()');
+                ota.error();
+            }
+            console.log('Esptool.end(code=' + code + ')');
+        });
     });
 
 process.on('SIGINT', function() {
@@ -110,14 +130,6 @@ process.on('exit', code => {
 ```
 - go to your Arduino IDE, select the port labelled as 'Node Device'
 - build and upload a sketch e.g. the Blink sketch (password is `test`)
-- upload the file that was created by the example script (the following command is for esp boards only)
-```shell
-<path to python>python 
-  <path to your esp8266 tools>/upload.py 
-  --chip esp8266 
-  --port <your com port> 
-  --baud 115200 --after hard_reset write_flash 0x0 "<path to example script>\binary.hex"
-```
 
 # License
 This is licensed under WTFPL, so do whatever you like with this code.

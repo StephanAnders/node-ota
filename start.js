@@ -1,28 +1,23 @@
-const nodeOta = require('./dist/index.js');
+const nodeOta = require('./dist/index');
 const fs = require('fs');
-
 const ota = new nodeOta.NodeOTA(true);
 
-let file = '';
-let filehandle = fs.createWriteStream('./binary.hex');
+let filehandle = null;
 ota
     .begin('Node Device', 8266, 'test')
     .onStart((size => {
-        file = '';
-        console.log('START');
+        filehandle = fs.createWriteStream('./binary.hex');
+        console.log('Script.start()');
     }))
     .onProgress(((currentPacket, transferred, total, data) => {
         filehandle.write(data);
-        console.log((transferred / total) * 100 + '%');
     }))
     .onError(((err) => {
-        file = '';
-        console.log('ERROR');
+        console.log('Script.error()');
     }))
     .onEnd(() => {
+        console.log('Script.end()');
         filehandle.close();
-        console.log('FILE WRITTEN')
-        console.log('END');
     });
 
 process.on('SIGINT', function() {

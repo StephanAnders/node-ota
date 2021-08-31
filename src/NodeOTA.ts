@@ -158,6 +158,7 @@ export class NodeOTA {
                     this.state = OtaState.WAITING;
                     if (this.debug) console.log('NodeOTA.state(idle => waiting for auth)');
                 } else {
+                    this.socket.send('OK');
                     if (this.debug) console.log('NodeOTA.state(idle => updating)');
                     this.runUpdate();
                 }
@@ -211,14 +212,17 @@ export class NodeOTA {
                     if (this.onProgressCb) this.onProgressCb(data.length, transferred, this.size, data);
 
                     if (transferred == this.size) {
-                        if (this.debug) console.log('NodeOTA.runUpdate(transferred=' + transferred + ')');
+                        if (this.debug) console.log('NodeOTA.runUpdate(transferred=' + transferred + ' bytes)');
 
-                        socket.write('OK');
-                        socket.end();
                         if (this.onEndCb) this.onEndCb();
+                        // @ts-ignore: the onEnd callback might set the state to OtaState.ERROR, therefore this check is needed
+                        if (this.state !== OtaState.ERROR) {
+                            socket.write('OK');
+                            socket.end();
 
-                        if (this.debug) console.log('NodeOTA.state(updating => idle)');
-                        this.state = OtaState.IDLE;
+                            if (this.debug) console.log('NodeOTA.state(updating => idle)');
+                            this.state = OtaState.IDLE;
+                        }
                     }
                 }
 
