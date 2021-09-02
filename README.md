@@ -146,4 +146,4 @@ Feel free to create issues or PRs.
 
 # TODOs
 - [x] publishing this library as npm
-- [ ] automatic test
+- [ ] automated tests
