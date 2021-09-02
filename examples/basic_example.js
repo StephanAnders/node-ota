@@ -1,4 +1,4 @@
-const nodeOta = require('./dist/index');
+const nodeOta = require('../dist');
 const fs = require('fs');
 const ota = new nodeOta.NodeOTA(true);
 

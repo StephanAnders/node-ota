@@ -100,8 +100,8 @@ ota
         filehandle.close();
 
         const params = board === 'ESP32'
-            ? ['--port', '/dev/ttyUSB0', '--baud', '115200', '--before', 'default_reset', '--after', 'hard_reset', 'write_flash', '0x10000', 'binary.hex']
-            : ['--port', '/dev/ttyUSB0', '--baud', '115200', '--before', 'default_reset', '--after', 'hard_reset', 'write_flash', '0x0', 'binary.hex']
+            ? ['--port', '/dev/ttyUSB0', '--baud', '115200', '--before', 'default_reset', '--after', 'hard_reset', 'write_flash', '0x10000', 'binary.bin']
+            : ['--port', '/dev/ttyUSB0', '--baud', '115200', '--before', 'default_reset', '--after', 'hard_reset', 'write_flash', '0x0', 'binary.bin']
         const esptool = spawn('esptool.py', params, {cwd: __dirname});
 
         esptool.stdout.on('data', (data) => {
@@ -137,7 +137,7 @@ This is licensed under WTFPL, so do whatever you like with this code.
 # Development/Usage
 This library is written in TypeScript und bundled with rollup for further usage and publishing and see src/NodeOTA.ts for
 the source code. If you just want to use the library either get via npm or run `npm run start`, which will bundle the
-library first and start the node script `start.js` afterwards.
+library first and start the node script `basic_example.js` afterwards.
 
 # Contribution
 Feel free to create issues or PRs.

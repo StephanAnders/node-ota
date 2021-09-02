@@ -1,6 +1,6 @@
 {
   "name": "node-ota",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "ArduinoOTA-like client written in JS",
   "main": "dist/index.js",
   "files": [
@@ -8,7 +8,7 @@
   ],
   "scripts": {
     "build": "rollup -c rollup.config.js",
-    "start": "rollup -c rollup.config.js && node start.js",
+    "start": "rollup -c rollup.config.js && node examples/basic_example.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Stephan Anders",
