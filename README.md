@@ -5,7 +5,7 @@
 ## Motivation
 I'd like to run/maintain an Arduino board that is connected to a Raspberry Pi Zero without having the need
 to hassle with manual updating the Arduino firmware via the Rasperry. Therefore I implemented this node-based ArduinoOTA
-simulation. The idea is that you can implement changes in your IDE of choice (Arduino IDE, vscode, or Visual Studio with vMicro etc) 
+server. The idea is that you can implement changes in your IDE of choice (Arduino IDE, vscode, or Visual Studio with vMicro etc) 
 and just hit the "upload" button. This library will receive all update requests from the IDE and provide you some callbacks
 (like ArduinoOTA) that can be used e.g. to transfer the binary via UART using avrdude or similar tools. 
 
@@ -16,6 +16,8 @@ Nonetheless, I'll reply to all issues you create and review/merge your PRs (if t
 - v1.0.1 -> first working implementation
 - v1.0.2 -> fix package.json
 - v2.0.0 -> fix onProgress event and extend example
+- v2.0.1 -> updated example and documentation
+- v2.0.2 -> added another example
 
 ## Implementation
 I followed the implementation of the original [ArduinoOTA](https://github.com/esp8266/Arduino/blob/master/libraries/ArduinoOTA) library
