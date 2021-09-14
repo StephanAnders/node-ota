@@ -123,11 +123,15 @@ ota
         });
     });
 
+let cleanedUp = false;
 process.on('SIGINT', function() {
-    process.exit();
+    ota.end(() => {
+        cleanedUp = true;
+        process.exit();
+    });
 });
 process.on('exit', code => {
-    ota.end();
+    if (!cleanedUp) ota.end();
 });
 ```
 - go to your Arduino IDE, select the port labelled as 'Node Device'
