@@ -20,9 +20,13 @@ ota
         filehandle.close();
     });
 
+let cleanedUp = false;
 process.on('SIGINT', function() {
-    process.exit();
+    ota.end(() => {
+        cleanedUp = true;
+        process.exit();
+    });
 });
 process.on('exit', code => {
-    ota.end();
+    if (!cleanedUp) ota.end();
 });

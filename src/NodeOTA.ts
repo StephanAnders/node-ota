@@ -100,15 +100,20 @@ export class NodeOTA {
         return this;
     }
 
-    public end() {
+    public end(cb?: () => void) {
         if (this.debug) console.log('NodeOTA.end()');
 
-        this.bonjour.unpublishAll();
-        this.bonjour.destroy();
-        if (this.debug) console.log('NodeOTA.mdns.unpublishAll()', 'NoteOTA.mdns.destroy()');
+        this.bonjour.unpublishAll(() => {
+            if (this.debug) console.log('NodeOTA.mdns.unpublishAll()');
 
-        this.socket.close();
-        if (this.debug) console.log('NodeOTA.socket.close())');
+            this.bonjour.destroy();
+            console.log('NoteOTA.mdns.destroy()');
+
+            this.socket.close();
+            if (this.debug) console.log('NodeOTA.socket.close())');
+
+            if (cb) cb();
+        });
     }
 
     public error() {
